@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoadingGlobalService } from './loading-global.service';
@@ -8,18 +8,26 @@ import { LoadingGlobalService } from './loading-global.service';
   templateUrl: './loading-global.component.html',
   styleUrls: ['./loading-global.component.css']
 })
-export class LoadingGlobalComponent implements OnInit, OnDestroy {
+export class LoadingGlobalComponent implements OnInit, OnChanges, OnDestroy {
+
+  @Input() public initialStatus: 'show' | undefined;
   public show: boolean;
   private _subscription: Subscription;
 
   constructor(private loadingGlobalService: LoadingGlobalService) {
-    this.show = false;
   }
 
   ngOnInit(): void {
     this._subscription = this.loadingGlobalService.loaderState.subscribe(
       (state) => this.show = state.show
     );
+  }
+
+  ngOnChanges() {
+    if (!!this.initialStatus && this.initialStatus !== 'show') {
+      throw new Error('property "initialStatus" can bem only set to "show"');
+    }
+    this.show = this.initialStatus === 'show' ? true : false;
   }
 
   ngOnDestroy(): void {

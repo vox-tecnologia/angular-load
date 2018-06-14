@@ -21,6 +21,10 @@ export class AppComponent {
     private loadingLocalService: LoadingLocalService
   ) {
     this.exempleC = 'exemplo-c';
+
+    setTimeout(() => {
+      this.loadingGlobalService.hide();
+    }, 1500);
   }
 
   public global() {

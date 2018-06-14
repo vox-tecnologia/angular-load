@@ -19,6 +19,16 @@ import the module that you need inside your application's module and the service
 import {LoadingGlobalModule, LoadingModalModule, LoadingInputModule} from 'vox-preload';
 import {LoadingGlobalService, LoadingModalService, LoadingInputService} from 'vox-preload';
 ```
+
+|Obs.: |
+|----|
+|By default the components starts with the status set to hidden.|
+|If you need to start with a visible loading you can set the "initialStatus" attribute to "show".|
+
+```html
+<vox-loading-global inititalStatus="show"></vox-loading-global>
+```
+
 ##### usually "modal" and "global" will be imported inside the main module of the application, but "input" will be imported inside the componet related to it .
 ***
 call the service inside the method that make the request:
