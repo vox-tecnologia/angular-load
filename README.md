@@ -9,10 +9,10 @@
 *test a live exemple here: https://vox-tecnologia.github.io/voxPreload/*
 >### installing:
 ```
-npm i vox-preload --save
+npm i @voxtecnologia/vox-preload --save
 ```
 >### components:
-we have three types of loading:
+we have four types of loading:
 + A global loading that appears over the application
 + A modal with a loading that pops up when the request is made
 + A local loading that appears under a designated input field
@@ -21,8 +21,8 @@ we have three types of loading:
 import the module that you need inside your application's module and the service inside the service with the request that will trigger the loading
 
 ```typescript
-import {LoadingGlobalModule, LoadingModalModule, LoadingInputModule} from 'vox-preload';
-import {LoadingGlobalService, LoadingModalService, LoadingInputService} from 'vox-preload';
+import {LoadingGlobalModule, LoadingModalModule, LoadingLocalModule, LoadingInputModule} from 'vox-preload';
+import {LoadingGlobalService, LoadingModalService, LoadingLocalService, LoadingInputService} from 'vox-preload';
 ```
 ##### usually "modal" and "global" will be imported inside the main module of the application, but "input" will be imported inside the componet related to it .
 ***
