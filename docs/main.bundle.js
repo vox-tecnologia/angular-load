@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<vox-loading-global></vox-loading-global>\n<vox-loading-modal></vox-loading-modal>\n<div class=\"container text-center\">\n\n  <div class=\"row\">\n    <h1 class=\"col-12\">\n      <img width=\"150\" alt=\"vox Logo\" src=\"assets/logo-vox.png\">\n    </h1>\n  </div>\n  <div class=\"row\">\n    <h2 class=\"col-12\"> Vox Loading </h2>\n\n    <div class=\"col-12\">\n      <button (click)=\"global()\" class=\"btn btn-warning\">\n        loading global\n      </button>\n      <button (click)=\"modal()\" class=\"btn btn-primary\">\n        loading modal\n      </button>\n      <button (click)=\"local()\" class=\"btn btn-info\">\n        loading local\n      </button>\n      <button (click)=\"campoSucesso()\" class=\"btn btn-success\">\n        loading input success\n      </button>\n      <button (click)=\"campoErro()\" class=\"btn btn-danger\">\n          loading input error\n      </button>\n    </div>\n  </div>\n\n  <vox-loading-local name=\"exemple-a\"></vox-loading-local>\n\n  <div class=\"row mt-3\">\n    <div class=\"col-3 offset-3\">\n      <div class=\"input-group ml-1\">\n        <div class=\"input-group-addon\">input</div>\n        <input type=\"text\" class=\"form-control\">\n      </div>\n      <vox-loading-input name=\"exemple-b\"></vox-loading-input>\n    </div>\n\n    <div class=\"col-3\">\n      <div class=\"input-group ml-1\">\n        <div class=\"input-group-addon\">input</div>\n        <input type=\"text\" class=\"form-control\">\n      </div>\n      <vox-loading-input [name]=\"exempleC\"></vox-loading-input>\n    </div>\n  </div>\n\n</div>\n\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<vox-loading-global initialStatus=\"show\"></vox-loading-global>\n<vox-loading-modal></vox-loading-modal>\n<div class=\"container text-center\">\n\n  <div class=\"row\">\n    <h1 class=\"col-12\">\n      <img width=\"150\" alt=\"vox Logo\" src=\"assets/logo-vox.png\">\n    </h1>\n  </div>\n  <div class=\"row\">\n    <h2 class=\"col-12\"> Vox Loading </h2>\n\n    <div class=\"col-12\">\n      <button (click)=\"global()\" class=\"btn btn-warning\">\n        loading global\n      </button>\n      <button (click)=\"modal()\" class=\"btn btn-primary\">\n        loading modal\n      </button>\n      <button (click)=\"local()\" class=\"btn btn-info\">\n        loading local\n      </button>\n      <button (click)=\"campoSucesso()\" class=\"btn btn-success\">\n        loading input success\n      </button>\n      <button (click)=\"campoErro()\" class=\"btn btn-danger\">\n          loading input error\n      </button>\n    </div>\n  </div>\n\n  <vox-loading-local name=\"exemple-a\"></vox-loading-local>\n\n  <div class=\"row mt-3\">\n    <div class=\"col-3 offset-3\">\n      <div class=\"input-group ml-1\">\n        <div class=\"input-group-addon\">input</div>\n        <input type=\"text\" class=\"form-control\">\n      </div>\n      <vox-loading-input name=\"exemple-b\"></vox-loading-input>\n    </div>\n\n    <div class=\"col-3\">\n      <div class=\"input-group ml-1\">\n        <div class=\"input-group-addon\">input</div>\n        <input type=\"text\" class=\"form-control\">\n      </div>\n      <vox-loading-input [name]=\"exempleC\"></vox-loading-input>\n    </div>\n  </div>\n\n</div>\n\n"
 
 /***/ }),
 
@@ -62,11 +62,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var AppComponent = /** @class */ (function () {
     function AppComponent(loadingGlobalService, loadingModalService, loadingInputService, loadingLocalService) {
+        var _this = this;
         this.loadingGlobalService = loadingGlobalService;
         this.loadingModalService = loadingModalService;
         this.loadingInputService = loadingInputService;
         this.loadingLocalService = loadingLocalService;
         this.exempleC = 'exemplo-c';
+        setTimeout(function () {
+            _this.loadingGlobalService.hide();
+        }, 1500);
     }
     AppComponent.prototype.global = function () {
         var _this = this;
@@ -241,15 +245,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var LoadingGlobalComponent = /** @class */ (function () {
     function LoadingGlobalComponent(loadingGlobalService) {
         this.loadingGlobalService = loadingGlobalService;
-        this.show = false;
     }
     LoadingGlobalComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._subscription = this.loadingGlobalService.loaderState.subscribe(function (state) { return _this.show = state.show; });
     };
+    LoadingGlobalComponent.prototype.ngOnChanges = function () {
+        if (!!this.initialStatus && this.initialStatus !== 'show') {
+            throw new Error('property "initialStatus" can bem only set to "show"');
+        }
+        this.show = this.initialStatus === 'show' ? true : false;
+    };
     LoadingGlobalComponent.prototype.ngOnDestroy = function () {
         this._subscription.unsubscribe();
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
+        __metadata("design:type", Object)
+    ], LoadingGlobalComponent.prototype, "initialStatus", void 0);
     LoadingGlobalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'vox-loading-global',
@@ -460,7 +473,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var LoadingInputComponent = /** @class */ (function () {
     function LoadingInputComponent(loadingInputService) {
         this.loadingInputService = loadingInputService;
-        this.show = false;
         this._properties = new __WEBPACK_IMPORTED_MODULE_2__input_properties__["a" /* InputProperties */]();
     }
     LoadingInputComponent.prototype.ngOnInit = function () {
@@ -476,6 +488,12 @@ var LoadingInputComponent = /** @class */ (function () {
                 }, 3000);
             }
         });
+    };
+    LoadingInputComponent.prototype.ngOnChanges = function () {
+        if (!!this.initialStatus && this.initialStatus !== 'show') {
+            throw new Error('property "initialStatus" can bem only set to "show"');
+        }
+        this.show = this.initialStatus === 'show' ? true : false;
     };
     LoadingInputComponent.prototype.ngOnDestroy = function () {
         this._subscription.unsubscribe();
@@ -502,6 +520,10 @@ var LoadingInputComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
         __metadata("design:type", String)
     ], LoadingInputComponent.prototype, "name", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
+        __metadata("design:type", Object)
+    ], LoadingInputComponent.prototype, "initialStatus", void 0);
     LoadingInputComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'vox-loading-input',
@@ -654,11 +676,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var LoadingLocalComponent = /** @class */ (function () {
     function LoadingLocalComponent(loadingLocalService) {
         this.loadingLocalService = loadingLocalService;
-        this.show = false;
     }
     LoadingLocalComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._subscription = this.loadingLocalService.loaderState.subscribe(function (state) { return _this.show = _this.checaNome(state) ? state.show : _this.show; });
+    };
+    LoadingLocalComponent.prototype.ngOnChanges = function () {
+        if (!!this.initialStatus && this.initialStatus !== 'show') {
+            throw new Error('property "initialStatus" can bem only set to "show"');
+        }
+        this.show = this.initialStatus === 'show' ? true : false;
     };
     LoadingLocalComponent.prototype.ngOnDestroy = function () {
         this._subscription.unsubscribe();
@@ -670,6 +697,10 @@ var LoadingLocalComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
         __metadata("design:type", String)
     ], LoadingLocalComponent.prototype, "name", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
+        __metadata("design:type", Object)
+    ], LoadingLocalComponent.prototype, "initialStatus", void 0);
     LoadingLocalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'vox-loading-local',
@@ -813,7 +844,6 @@ var LoadingModalComponent = /** @class */ (function () {
     function LoadingModalComponent(loadingModalService, modalService) {
         this.loadingModalService = loadingModalService;
         this.modalService = modalService;
-        this.show = false;
         this._modalOptions = {};
     }
     LoadingModalComponent.prototype.ngOnInit = function () {
@@ -829,6 +859,12 @@ var LoadingModalComponent = /** @class */ (function () {
             _this._modalRef.close();
         });
     };
+    LoadingModalComponent.prototype.ngOnChanges = function () {
+        if (!!this.initialStatus && this.initialStatus !== 'show') {
+            throw new Error('property "initialStatus" can bem only set to "show"');
+        }
+        this.show = this.initialStatus === 'show' ? true : false;
+    };
     LoadingModalComponent.prototype.ngOnDestroy = function () {
         this._subscription.unsubscribe();
     };
@@ -842,6 +878,10 @@ var LoadingModalComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* ViewChild */])('content'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */])
     ], LoadingModalComponent.prototype, "_content", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Input */])(),
+        __metadata("design:type", Object)
+    ], LoadingModalComponent.prototype, "initialStatus", void 0);
     LoadingModalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'vox-loading-modal',

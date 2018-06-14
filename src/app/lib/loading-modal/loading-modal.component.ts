@@ -4,7 +4,8 @@ import {
   Input,
   OnDestroy,
   ElementRef,
-  ViewChild
+  ViewChild,
+  OnChanges
 } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -17,7 +18,7 @@ import { LoadingModalService } from './loading-modal.service';
   templateUrl: './loading-modal.component.html',
   styleUrls: ['./loading-modal.component.css']
 })
-export class LoadingModalComponent implements OnInit, OnDestroy {
+export class LoadingModalComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('content') private _content: ElementRef;
   private _subscription: Subscription;
   private _modalOptions: NgbModalOptions;
@@ -26,12 +27,12 @@ export class LoadingModalComponent implements OnInit, OnDestroy {
   public show: boolean;
   public textModal: string;
   public title: string;
+  @Input() public initialStatus: 'show' | undefined;
 
   constructor(
     private loadingModalService: LoadingModalService,
     private modalService: NgbModal
   ) {
-    this.show = false;
     this._modalOptions = {};
   }
 
@@ -48,6 +49,13 @@ export class LoadingModalComponent implements OnInit, OnDestroy {
         this._modalRef.close();
       }
     );
+  }
+
+  ngOnChanges() {
+    if (!!this.initialStatus && this.initialStatus !== 'show') {
+      throw new Error('property "initialStatus" can bem only set to "show"');
+    }
+    this.show = this.initialStatus === 'show' ? true : false;
   }
 
   ngOnDestroy(): void {

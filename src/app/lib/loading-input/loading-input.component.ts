@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoadingInputService } from './loading-input.service';
@@ -10,15 +10,15 @@ import { StatusEnum } from './status-enum';
   templateUrl: './loading-input.component.html',
   styleUrls: ['./loading-input.component.css']
 })
-export class LoadingInputComponent implements OnInit, OnDestroy {
+export class LoadingInputComponent implements OnInit, OnChanges, OnDestroy {
   private _subscription: Subscription;
   private _properties: InputProperties;
 
   @Input() public name: string;
+  @Input() public initialStatus: 'show' | undefined;
   public show: boolean;
 
   constructor(private loadingInputService: LoadingInputService) {
-    this.show = false;
     this._properties = new InputProperties();
   }
 
@@ -37,6 +37,13 @@ export class LoadingInputComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  ngOnChanges() {
+    if (!!this.initialStatus && this.initialStatus !== 'show') {
+      throw new Error('property "initialStatus" can bem only set to "show"');
+    }
+    this.show = this.initialStatus === 'show' ? true : false;
   }
 
   ngOnDestroy(): void {
